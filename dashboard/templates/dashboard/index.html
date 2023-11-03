@@ -1,0 +1,32 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <p class="flex justify-end text-white p-3">
+      <span class="border border-yellow-500 p-1"><strong class=" text-xl  rounded-xl p-1 text-black"> 
+        Your Username : </strong> <span class="text-xl font-bold text-black p-1">{{ request.user }}</span>
+      </span>
+    </p>  
+    <div class="mt-6 px-6 py-4 rounded-xl">
+        <h2 class="mb-8 text-3xl font-extrabold text-center text-black">My Books</h2>
+        
+        <div class="grid grid-cols-6 gap-5 ">
+          {% for item in items %}
+              <div>
+                <a href="{% url 'item:detail' item.id %}">
+                  <div>
+                    <img src="{{ item.image.url }}" style="width: 160px; height: 200px;" class=" border-2 bg-gray-400 rounded-t-xl p-1">
+                  </div>
+
+                  <div class="p-1 rounded-b-xl bg-gray-300" style="width:160px;">
+                    <h2 class="text-1xl truncate whitespace-nowrap">{{ item.name }}</h2>
+                    <p class="text-grey-500 whitespace-nowrap">Price: {{ item.price }}</p>
+                  </div>  
+                </a> 
+              </div>  
+          {% endfor %}  
+        </div>
+    </div> 
+{% endblock %}
+

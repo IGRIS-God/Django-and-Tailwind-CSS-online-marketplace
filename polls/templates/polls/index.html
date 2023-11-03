@@ -1,0 +1,52 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+
+
+<div class="mb-4 px-6 py-8 bg-grey-600" style="background-image: url('/media/item_images/mainbg.jpg'); background-size: cover; background-position: center;"> 
+    <h2 class="mb-12 text-center text-3xl font-extrabold text-white">Newest Books</h2>
+    
+    <div class="grid grid-cols-5 gap-3 ">
+      {% for item in items %}
+          <div>
+            <a href="{% url 'item:detail' item.id %}">
+              <div>
+                <img src="{{ item.image.url }}" style="object-fit; cover; height: 250px; width: 192px; " class="rounded-t-xl">
+              </div>
+
+              <div class="p-2 w-48 h-26 bg-white rounded-b-xl word-wrap:break-words">
+                <h2 class="text-1xl truncate word-wrap: break-words">{{ item.name }}</h2>
+                <p class="text-gray-500 text-1xl word-wrap: break-words">Price: {{ item.price }}</p>
+              </div>  
+            </a> 
+          </div>  
+      {% endfor %}  
+    </div>
+</div>  
+<div>
+  <h2 class="flex items-center p-2 justify-center mb-10 text-3xl font-extrabold text-center bg-slate-600 text-yellow-600 ">Categories</h2>
+  <div class="grid grid-cols-1 gap-3">
+      {% for category in categories %}
+            <div class="space-y-4">
+              <a href="{% url 'item:items'%}?query={{ query }}&category={{ category.id }}" class="flex w-full text-2xl font-semibold justify-start p-2 bg-violet-950 text-white mb-0 " >{{ category.name }} - {{ category.items.count }} items</a>
+              <div class="flex">
+                {% for item in category.items.all|slice:":6" %}
+                  <a href="{% url 'item:detail' item.id %}">
+                    <div class="border-2 bg-gray-500 rounded-t-xl ml-8" style="width:160px; height: 220px;">
+                      {% if item.image %}
+                        <img src="{{ item.image.url }}" style="object-fit; width: 160px; height: 220px;" class="rounded-t-xl p-1">
+                      {% endif %}
+                    </div>
+                    <div class="p-1 bg-slate-300 rounded-b-xl ml-8 border-2" style="width:160px;">
+                    <h2 class="text-1xl truncate">{{ item.name }}</h2>
+                    <p class="text-grey-500 text-xs truncate">Price: {{ item.price }}</p>
+                    </div>  
+                  </a>
+                {% endfor %} 
+            </div> 
+      {% endfor %}
+  </div>
+</div>  
+{% endblock %}

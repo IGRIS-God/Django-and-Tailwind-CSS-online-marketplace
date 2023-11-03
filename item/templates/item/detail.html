@@ -1,0 +1,78 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}{{ item.name }}{% endblock %}
+
+{% block content %}
+  <div style="background-image: url('/media/item_images/ranbg.jpg'); background-size: cover; background-position: center;">
+      <div class="grid grid-cols-5 gap-4">
+          <div class="col-span-1">
+              <img src="{{ item.image.url }}" class="p-2 rounded-xl ">
+          </div>
+          <div class="col-span-4 p-6 bg-gray-100 border-2 border-red-300">
+              <h1 class="mb-6 text-3xl font-bold">{{item.name}}</h1>
+              <div class="border-b border-gray-500 w-full my-4"></div>
+                {% if item.is_sold %}
+                  <p class="inline-flex justify-end  text-black text-xl font-bold mb-2 bg-red-500 border-2 p-1">Is Sold: Yes</p>
+                {% else %}
+                  <p class="inline-flex justify-end text-black text-xl font-bold mb-2 bg-red-500 border-2">Is Sold: No</p>
+                {% endif %}
+              <p class="rounded-xl pr-2 text-black text-xl font-bold mb-2"><strong>Price: </strong>{{ item.price }}</p>
+              <p class="rounded-xl pr-2 text-black text-xl font-bold mb-2"><strong>Condition: </strong> {{ item.get_condition_display }}</p>
+              <p class="rounded-xl text-black text-xl font-bold mb-2"><strong>Seller: </strong>{{ item.published_by.username }}</p>
+
+              {% if item.item_number %}
+              <div class="border border-gray-300 inline-block rounded-md mb-1">
+                <strong class=" text-black text-xl">Item Number:</strong>
+                <span>{{ item.item_number }}</span>
+              </div>
+              {% endif %}
+          
+              {% if item.description %}   
+                  <p class="text-black-700 word-wrap: break-words">
+                    <strong class="pr-2 text-xl text-black">Description/condition:</strong><br> 
+                    <span class="p-2 text-xl font-bold">{{ item.description }} </span>
+                  </p> 
+              {% endif %}  
+
+
+              {% if request.user == item.published_by %}
+                <div class='mt-6 p-3 bg-gray-300 rounded-xl'>
+                  <p>This is your Book!</p>
+                  <a href="{% url 'item:edit' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl">Edit</a>
+                  <a href="{% url 'item:delete' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl">Delete</a>
+                </div>
+              {% else %} 
+
+              {% if item.is_sold %}
+              <p class="inline-block mt-6 px-4 py-3 text-lg font-semibold bg-amber-900 text-white rounded-xl hover:bg-teal-700">This book is already sold and is not available</p>
+              {% else %}
+              <a href="{% url 'conversation:new' item.id %}" class="inline-block mt-6 px-4 py-3 text-lg font-semibold bg-amber-900 text-white rounded-xl hover:bg-teal-700">Contact seller</a>
+              <p class="font-bold p-2">This book is not sold by reread. To buy this book, contact respective seller by messaging and buy the book with mutual understanding.</p>
+              {% endif %}
+              {% endif %}
+          </div>  
+      </div>
+
+      <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+          <h2 class="mb-12 text-2xl text-center">Related Books</h2>
+          
+          <div class="grid grid-cols-5 gap-3">
+            {% for item in related_items %}
+                <div>
+                  <a href="{% url 'item:detail' item.id %}">
+                    <div>
+                      <img src="{{ item.image.url }}" style="width: 300px; height: 300px;" class="rounded-t-xl">
+                    </div>
+
+                    <div class="p-6 bg-white rounded-b-xl">
+                      <h2 class="text-xl">{{ item.name }}</h2>
+                      <p class="text-grey-500">Price: {{ item.price }}</p>
+                    </div>  
+                  </a> 
+                </div>  
+            {% endfor %}  
+          </div>
+      </div>  
+    </div>    
+
+{% endblock %}

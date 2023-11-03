@@ -1,0 +1,31 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}Inbox{% endblock title %}
+
+{% block content %}
+    <h1 class="flex justify-center text-black font-3xl mb-6 text-3xl">Inbox</h1>
+    <div class="flex mb-60 justify-start gap-4 p-3" style="background-image: url('/media/item_images/conimg.jpg'); background-size: cover; background-position: center;">
+        {% for conversation in conversations %}
+            <a href="{% url 'conversation:detail' conversation.id %}">
+                <div class="col-span-1 justify-start relative inline-block">
+                    <div class="p-1 border rounded-xl mb-0">
+                        <div class="w-20 h-20 pr-4 overflow-hidden">
+                            <img src="{{ conversation.item.image.url }}" class="rounded-xl">
+                        </div>
+                    
+                        <div>
+                            {% for member in conversation.members.all %}
+                                {% if member != request.user %}
+                                    <p class="sapce-y-1">
+                                        <strong class="text-yellow-500">{{ member.username }}</strong> | <span class="text-white">{{ conversation.modified_at }}</span>
+                                    </p>
+                                    <p class="text-white bg-black ">Book: {{ conversation.item.name }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
